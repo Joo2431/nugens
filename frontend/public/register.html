@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Join NuGens — Get Started</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:#080c12; --bg2:#0d1420; --surface:#111827; --border:rgba(255,255,255,0.07);
+      --accent:#00e5ff; --accent2:#f0b429; --text:#f0f4f8; --muted:#6b7a95;
+      --font-head:'Syne',sans-serif; --font-body:'DM Sans',sans-serif;
+    }
+    body { background:var(--bg); color:var(--text); font-family:var(--font-body); min-height:100vh; display:flex; }
+
+    .auth-layout { display:grid; grid-template-columns:1fr 1fr; min-height:100vh; width:100%; }
+    @media (max-width:768px) { .auth-layout { grid-template-columns:1fr; } }
+
+    /* LEFT PANEL */
+    .auth-left {
+      background:var(--bg2);
+      border-right:1px solid var(--border);
+      padding:3rem;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+    }
+    .auth-left-content { flex:1; display:flex; flex-direction:column; justify-content:center; }
+    .logo { display:flex; align-items:center; gap:0.75rem; text-decoration:none; }
+    .logo-mark { width:40px; height:40px; background:linear-gradient(135deg,var(--accent),#0099bb); border-radius:10px; display:flex; align-items:center; justify-content:center; font-family:var(--font-head); font-weight:800; font-size:1rem; color:#000; }
+    .logo-text { font-family:var(--font-head); font-weight:700; font-size:1.2rem; color:var(--text); }
+    .logo-text span { color:var(--accent); }
+
+    .left-hero { margin-top:4rem; }
+    .left-hero h2 { font-family:var(--font-head); font-size:2.2rem; font-weight:800; letter-spacing:-1px; line-height:1.2; margin-bottom:1rem; }
+    .left-hero p { color:var(--muted); font-size:0.95rem; line-height:1.7; max-width:340px; }
+
+    .product-list { margin-top:2.5rem; display:flex; flex-direction:column; gap:0.75rem; }
+    .product-item {
+      display:flex; align-items:center; gap:0.75rem;
+      background:var(--surface); border:1px solid var(--border);
+      border-radius:10px; padding:0.75rem 1rem;
+    }
+    .product-dot { width:8px; height:8px; border-radius:50%; }
+    .product-item-name { font-weight:500; font-size:0.9rem; }
+    .product-item-desc { color:var(--muted); font-size:0.78rem; }
+
+    /* RIGHT PANEL */
+    .auth-right { padding:3rem; display:flex; align-items:center; justify-content:center; }
+    .auth-form-wrap { width:100%; max-width:440px; }
+
+    .step { display:none; }
+    .step.active { display:block; }
+
+    .step-indicator {
+      display:flex; gap:0.5rem; margin-bottom:2rem;
+    }
+    .step-dot {
+      height:3px; border-radius:99px; background:var(--border); flex:1; transition:background 0.3s;
+    }
+    .step-dot.done { background:var(--accent); }
+
+    .form-title { font-family:var(--font-head); font-size:1.8rem; font-weight:700; letter-spacing:-0.5px; margin-bottom:0.5rem; }
+    .form-sub { color:var(--muted); font-size:0.9rem; margin-bottom:2rem; }
+
+    /* TYPE CARDS */
+    .type-grid { display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:2rem; }
+    .type-card {
+      background:var(--surface); border:2px solid var(--border); border-radius:14px;
+      padding:1.5rem; cursor:pointer; transition:all 0.2s; text-align:center;
+    }
+    .type-card:hover { border-color:rgba(0,229,255,0.4); }
+    .type-card.selected { border-color:var(--accent); background:rgba(0,229,255,0.05); }
+    .type-card .icon { font-size:2rem; margin-bottom:0.75rem; }
+    .type-card h4 { font-family:var(--font-head); font-size:1rem; font-weight:700; margin-bottom:0.25rem; }
+    .type-card p { color:var(--muted); font-size:0.78rem; line-height:1.5; }
+
+    /* FORM FIELDS */
+    .field { margin-bottom:1.25rem; }
+    .field label { display:block; font-size:0.82rem; font-weight:500; margin-bottom:0.5rem; color:var(--muted); }
+    .field input, .field select {
+      width:100%; background:var(--surface); border:1px solid var(--border);
+      border-radius:10px; padding:0.75rem 1rem; color:var(--text);
+      font-family:var(--font-body); font-size:0.9rem; outline:none;
+      transition:border-color 0.2s;
+    }
+    .field input:focus, .field select:focus { border-color:var(--accent); }
+    .field select option { background:var(--surface); }
+
+    .field-row { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+
+    .btn {
+      width:100%; padding:0.85rem; border-radius:10px; border:none;
+      font-family:var(--font-body); font-size:0.95rem; font-weight:600;
+      cursor:pointer; transition:all 0.2s;
+    }
+    .btn-primary { background:var(--accent); color:#000; }
+    .btn-primary:hover { background:#33eaff; }
+    .btn-ghost { background:transparent; border:1px solid var(--border); color:var(--text); }
+    .btn-ghost:hover { border-color:var(--accent); }
+
+    .btn-row { display:flex; gap:0.75rem; margin-top:1.5rem; }
+
+    .divider { text-align:center; color:var(--muted); font-size:0.8rem; margin:1.25rem 0; position:relative; }
+    .divider::before, .divider::after {
+      content:''; position:absolute; top:50%; width:42%; height:1px; background:var(--border);
+    }
+    .divider::before { left:0; } .divider::after { right:0; }
+
+    .link-action { text-align:center; margin-top:1.25rem; font-size:0.85rem; color:var(--muted); }
+    .link-action a { color:var(--accent); text-decoration:none; font-weight:500; }
+
+    /* PRODUCT SELECTOR */
+    .product-checks { display:grid; grid-template-columns:1fr 1fr; gap:0.75rem; margin-bottom:1.5rem; }
+    .product-check {
+      background:var(--surface); border:2px solid var(--border); border-radius:12px;
+      padding:1rem; cursor:pointer; transition:all 0.2s;
+    }
+    .product-check:hover { border-color:var(--border); }
+    .product-check.selected { border-color:var(--accent); background:rgba(0,229,255,0.05); }
+    .product-check .pc-name { font-weight:600; font-size:0.9rem; }
+    .product-check .pc-desc { color:var(--muted); font-size:0.75rem; margin-top:0.2rem; }
+
+    /* PASSWORD STRENGTH */
+    .strength-bar { height:3px; background:var(--border); border-radius:2px; margin-top:0.5rem; overflow:hidden; }
+    .strength-fill { height:100%; border-radius:2px; transition:all 0.3s; width:0%; }
+  </style>
+</head>
+<body>
+<div class="auth-layout">
+
+  <!-- LEFT -->
+  <div class="auth-left">
+    <a href="/" class="logo">
+      <div class="logo-mark">NG</div>
+      <span class="logo-text">Nu<span>Gens</span></span>
+    </a>
+    <div class="auth-left-content">
+      <div class="left-hero">
+        <h2>One account,<br/>every platform</h2>
+        <p>Sign up once and get instant access to the complete NuGens ecosystem — your career, learning, marketing and production tools in one place.</p>
+        <div class="product-list">
+          <div class="product-item">
+            <div class="product-dot" style="background:#00e5ff"></div>
+            <div>
+              <div class="product-item-name">Gen-E</div>
+              <div class="product-item-desc">AI Career Intelligence</div>
+            </div>
+          </div>
+          <div class="product-item">
+            <div class="product-dot" style="background:#f0b429"></div>
+            <div>
+              <div class="product-item-name">HyperX</div>
+              <div class="product-item-desc">Experience-Based Learning</div>
+            </div>
+          </div>
+          <div class="product-item">
+            <div class="product-dot" style="background:#a78bfa"></div>
+            <div>
+              <div class="product-item-name">DigiHub</div>
+              <div class="product-item-desc">Marketing & Community</div>
+            </div>
+          </div>
+          <div class="product-item">
+            <div class="product-dot" style="background:#f472b6"></div>
+            <div>
+              <div class="product-item-name">Units</div>
+              <div class="product-item-desc">Visual Production Studio</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p style="color:var(--muted);font-size:0.78rem">© 2025 NuGens</p>
+  </div>
+
+  <!-- RIGHT -->
+  <div class="auth-right">
+    <div class="auth-form-wrap">
+
+      <!-- STEP INDICATOR -->
+      <div class="step-indicator">
+        <div class="step-dot done" id="dot1"></div>
+        <div class="step-dot" id="dot2"></div>
+        <div class="step-dot" id="dot3"></div>
+        <div class="step-dot" id="dot4"></div>
+      </div>
+
+      <!-- STEP 1: TYPE -->
+      <div class="step active" id="step1">
+        <div class="form-title">Who are you?</div>
+        <div class="form-sub">We'll personalize your experience based on your goals.</div>
+        <div class="type-grid">
+          <div class="type-card" onclick="selectType('individual', this)">
+            <div class="icon">👤</div>
+            <h4>Individual</h4>
+            <p>Student, professional, job seeker or freelancer</p>
+          </div>
+          <div class="type-card" onclick="selectType('business', this)">
+            <div class="icon">🏢</div>
+            <h4>Business</h4>
+            <p>Startup, company or marketing team</p>
+          </div>
+        </div>
+        <button class="btn btn-primary" onclick="goStep(2)" id="btn-step1" disabled>Continue</button>
+        <div class="link-action">Already have an account? <a href="/login">Sign in</a></div>
+      </div>
+
+      <!-- STEP 2: PERSONAL INFO -->
+      <div class="step" id="step2">
+        <div class="form-title">Basic info</div>
+        <div class="form-sub">Create your NuGens account</div>
+        <div class="field-row">
+          <div class="field"><label>First name</label><input type="text" placeholder="Alex" id="fname" /></div>
+          <div class="field"><label>Last name</label><input type="text" placeholder="Smith" id="lname" /></div>
+        </div>
+        <div class="field"><label>Email address</label><input type="email" placeholder="alex@email.com" id="email" /></div>
+        <div class="field">
+          <label>Password</label>
+          <input type="password" placeholder="8+ characters" id="password" oninput="checkStrength(this.value)" />
+          <div class="strength-bar"><div class="strength-fill" id="strength-fill"></div></div>
+        </div>
+        <div class="field individual-field">
+          <label>Career field</label>
+          <select id="career-field">
+            <option value="">Select your field...</option>
+            <option>Technology & Software</option>
+            <option>Marketing & Growth</option>
+            <option>Design & Creative</option>
+            <option>Finance & Accounting</option>
+            <option>Operations & Management</option>
+            <option>Sales & Business Development</option>
+            <option>Human Resources</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="field business-field" style="display:none">
+          <label>Company name</label>
+          <input type="text" placeholder="Acme Inc." id="company-name" />
+        </div>
+        <div class="btn-row">
+          <button class="btn btn-ghost" onclick="goStep(1)">Back</button>
+          <button class="btn btn-primary" onclick="goStep(3)">Continue</button>
+        </div>
+      </div>
+
+      <!-- STEP 3: PRODUCT SELECTION -->
+      <div class="step" id="step3">
+        <div class="form-title">Choose products</div>
+        <div class="form-sub">Select which platforms you want access to (you can change this anytime).</div>
+        <div class="product-checks">
+          <div class="product-check selected" onclick="toggleProduct(this, 'gen-e')" data-product="gen-e">
+            <div class="pc-name">🧠 Gen-E</div>
+            <div class="pc-desc">AI career planning</div>
+          </div>
+          <div class="product-check" onclick="toggleProduct(this, 'hyperx')" data-product="hyperx">
+            <div class="pc-name">⚡ HyperX</div>
+            <div class="pc-desc">E-learning platform</div>
+          </div>
+          <div class="product-check" onclick="toggleProduct(this, 'digihub')" data-product="digihub">
+            <div class="pc-name">🚀 DigiHub</div>
+            <div class="pc-desc">Marketing tools</div>
+          </div>
+          <div class="product-check" onclick="toggleProduct(this, 'units')" data-product="units">
+            <div class="pc-name">🎬 Units</div>
+            <div class="pc-desc">Production studio</div>
+          </div>
+        </div>
+        <div class="field">
+          <label>Plan type</label>
+          <select id="plan-type">
+            <option value="starter">Starter — Free</option>
+            <option value="premium">Premium — $29/mo</option>
+            <option value="pro">Pro — $79/mo</option>
+          </select>
+        </div>
+        <div class="btn-row">
+          <button class="btn btn-ghost" onclick="goStep(2)">Back</button>
+          <button class="btn btn-primary" onclick="goStep(4)">Continue</button>
+        </div>
+      </div>
+
+      <!-- STEP 4: GOALS -->
+      <div class="step" id="step4">
+        <div class="form-title">What's your goal?</div>
+        <div class="form-sub">Help us personalize your dashboard from day one.</div>
+        <div class="field individual-goals">
+          <label>Career stage</label>
+          <select>
+            <option>Student / Fresher</option>
+            <option>Looking for first job</option>
+            <option>Switching careers</option>
+            <option>Growing in current role</option>
+            <option>Returning after career gap</option>
+          </select>
+        </div>
+        <div class="field individual-goals">
+          <label>Primary goal</label>
+          <select>
+            <option>Build a strong resume</option>
+            <option>Find a job</option>
+            <option>Learn new skills</option>
+            <option>Grow my freelance work</option>
+            <option>Build a personal brand</option>
+          </select>
+        </div>
+        <div class="field business-goals" style="display:none">
+          <label>Business focus</label>
+          <select>
+            <option>Hire talent</option>
+            <option>Grow marketing</option>
+            <option>Create content</option>
+            <option>All of the above</option>
+          </select>
+        </div>
+        <div class="field business-goals" style="display:none">
+          <label>Team size</label>
+          <select>
+            <option>Just me</option>
+            <option>2–10</option>
+            <option>11–50</option>
+            <option>50+</option>
+          </select>
+        </div>
+        <div class="btn-row">
+          <button class="btn btn-ghost" onclick="goStep(3)">Back</button>
+          <button class="btn btn-primary" onclick="submitForm()">Create account</button>
+        </div>
+        <div class="link-action" style="font-size:0.75rem;margin-top:1rem">
+          By continuing you agree to our <a href="#">Terms</a> and <a href="#">Privacy Policy</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+  let currentStep = 1;
+  let userType = '';
+  const selectedProducts = new Set(['gen-e']);
+
+  function selectType(type, el) {
+    userType = type;
+    document.querySelectorAll('.type-card').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
+    document.getElementById('btn-step1').disabled = false;
+
+    // Show/hide fields based on type
+    document.querySelectorAll('.individual-field').forEach(f => f.style.display = type === 'individual' ? 'block' : 'none');
+    document.querySelectorAll('.business-field').forEach(f => f.style.display = type === 'business' ? 'block' : 'none');
+    document.querySelectorAll('.individual-goals').forEach(f => f.style.display = type === 'individual' ? 'block' : 'none');
+    document.querySelectorAll('.business-goals').forEach(f => f.style.display = type === 'business' ? 'block' : 'none');
+  }
+
+  function goStep(n) {
+    document.getElementById('step' + currentStep).classList.remove('active');
+    document.getElementById('step' + n).classList.add('active');
+    for (let i = 1; i <= 4; i++) {
+      document.getElementById('dot' + i).classList.toggle('done', i <= n);
+    }
+    currentStep = n;
+  }
+
+  function toggleProduct(el, product) {
+    el.classList.toggle('selected');
+    if (selectedProducts.has(product)) selectedProducts.delete(product);
+    else selectedProducts.add(product);
+  }
+
+  function checkStrength(val) {
+    const fill = document.getElementById('strength-fill');
+    let score = 0;
+    if (val.length >= 8) score++;
+    if (/[A-Z]/.test(val)) score++;
+    if (/[0-9]/.test(val)) score++;
+    if (/[^a-zA-Z0-9]/.test(val)) score++;
+    const colors = ['#ef4444','#f0b429','#22c55e','#00e5ff'];
+    fill.style.width = (score * 25) + '%';
+    fill.style.background = colors[score - 1] || 'var(--border)';
+  }
+
+  function submitForm() {
+    window.location.href = '/dashboard';
+  }
+</script>
+</body>
+</html>
