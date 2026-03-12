@@ -32,15 +32,3 @@ router.post('/', authenticate, async (req, res) => {
 });
 
 module.exports = router;
-```
-
----
-
-**How to push these to your repo:**
-
-1. Create both files inside your `backend/routes/` folder
-2. Then in terminal:
-```
-git add backend/routes/products.js backend/routes/interactions.js
-git commit -m "fix: add missing products and interactions routes"
-git push
