@@ -1,28 +1,30 @@
-import { useEffect, useState } from "react";
-import { Navigate } from "react-router-dom";
-import { supabase } from "../lib/supabase";
+import React from "react";
+import { Navigate, useLocation } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+
+const PINK = "#e8185d";
+
+function Spinner() {
+  return (
+    <div style={{ display: "flex", alignItems: "center", justifyContent: "center", minHeight: "100vh", background: "#fafafa" }}>
+      <div style={{ textAlign: "center" }}>
+        <div style={{ width: 32, height: 32, border: "2px solid #f0f0f0", borderTopColor: PINK, borderRadius: "50%", animation: "spin 0.7s linear infinite", margin: "0 auto 12px" }} />
+        <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+        <div style={{ fontSize: 13, color: "#9ca3af", fontFamily: "'Plus Jakarta Sans', sans-serif" }}>Loading Gen-E...</div>
+      </div>
+    </div>
+  );
+}
 
 export default function ProtectedRoute({ children }) {
-  const [session, setSession] = useState(undefined); // undefined = loading
+  const { isLoggedIn, loading, initialized } = useAuth();
+  const location = useLocation();
 
-  useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => setSession(session));
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_e, s) => setSession(s));
-    return () => subscription.unsubscribe();
-  }, []);
+  if (!initialized || loading) return <Spinner />;
 
-  if (session === undefined) {
-    // Loading spinner
-    return (
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100vh", background: "#fff" }}>
-        <div style={{ textAlign: "center" }}>
-          <div style={{ fontFamily: "'Syne',sans-serif", fontWeight: 800, fontSize: 28, fontStyle: "italic", color: "#e8185d", letterSpacing: "-0.04em", marginBottom: 12 }}>GEN-E</div>
-          <div style={{ color: "#ccc", fontSize: 13 }}>Loading…</div>
-        </div>
-      </div>
-    );
+  if (!isLoggedIn) {
+    return <Navigate to="/auth" state={{ from: location }} replace />;
   }
 
-  if (!session) return <Navigate to="/auth" replace />;
   return children;
 }

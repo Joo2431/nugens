@@ -1,57 +1,67 @@
-require('dotenv').config();
-const express = require('express');
-const cors = require('cors');
-const helmet = require('helmet');
-const morgan = require('morgan');
-const { pool } = require('./config/database');
+require("dotenv").config();
+const express = require("express");
+const cors = require("cors");
+const helmet = require("helmet");
+const rateLimit = require("express-rate-limit");
 
 const app = express();
-const PORT = process.env.PORT || 5000;
 
-// ── MIDDLEWARE ──
+// ── Security & Parsing ────────────────────────────────
 app.use(helmet());
-app.use(cors({
-  origin: process.env.FRONTEND_URL || 'https://nugens.pages.dev',
-  credentials: true
-}));
-app.use(express.json({ limit: '10mb' }));
+app.use(express.json({ limit: "5mb" }));
 app.use(express.urlencoded({ extended: true }));
-app.use(morgan('combined'));
 
-// ── ROUTES ──
-app.use('/api/auth',          require('./routes/auth'));
-app.use('/api/users',         require('./routes/users'));
-app.use('/api/subscriptions', require('./routes/subscriptions'));
-app.use('/api/products',      require('./routes/products'));
-app.use('/api/interactions',  require('./routes/interactions'));
-app.use('/api/gen-e',         require('./routes/genE'));
-app.use('/api/hyperx',        require('./routes/hyperX'));
-app.use('/api/digihub',       require('./routes/digiHub'));
-app.use('/api/units',         require('./routes/units'));
-app.use('/api/ai',            require('./routes/ai'));
+// ── CORS ──────────────────────────────────────────────
+const allowedOrigins = [
+  "http://localhost:3000",
+  "http://localhost:5173",
+  "https://nugens.in.net",
+  "https://nugens-cat.pages.dev",
+  process.env.FRONTEND_URL,
+].filter(Boolean);
 
-// ── HEALTH CHECK ──
-app.get('/health', async (req, res) => {
-  try {
-    await pool.query('SELECT 1');
-    res.json({ status: 'ok', db: 'connected', timestamp: new Date().toISOString() });
-  } catch (err) {
-    res.status(500).json({ status: 'error', db: 'disconnected', error: err.message });
-  }
+app.use(cors({
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) return callback(null, true);
+    callback(new Error("Not allowed by CORS"));
+  },
+  credentials: true,
+}));
+
+// ── Rate Limiting ─────────────────────────────────────
+const globalLimit = rateLimit({ windowMs: 15 * 60 * 1000, max: 200 });
+const authLimit   = rateLimit({ windowMs: 15 * 60 * 1000, max: 20, message: { error: "Too many auth attempts" } });
+const aiLimit     = rateLimit({ windowMs: 60 * 1000, max: 30, message: { error: "Too many AI requests" } });
+
+app.use(globalLimit);
+
+// ── Health Check ──────────────────────────────────────
+app.get("/health", (req, res) => {
+  res.json({ status: "ok", service: "NuGens API", timestamp: new Date().toISOString() });
 });
 
-// ── ERROR HANDLER ──
+// ── Routes ────────────────────────────────────────────
+app.use("/api/auth",  authLimit, require("./routes/auth"));
+app.use("/api/gene",  aiLimit,   require("./routes/genE"));
+app.use("/api/users",            require("./routes/users"));
+
+// ── 404 ───────────────────────────────────────────────
+app.use((req, res) => {
+  res.status(404).json({ error: `Route ${req.method} ${req.path} not found` });
+});
+
+// ── Error Handler ─────────────────────────────────────
 app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(err.status || 500).json({
-    success: false,
-    message: err.message || 'Internal server error',
-    ...(process.env.NODE_ENV === 'development' && { stack: err.stack })
-  });
+  console.error("Unhandled error:", err);
+  res.status(500).json({ error: "Internal server error" });
 });
 
+// ── Start ─────────────────────────────────────────────
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-  console.log(`🚀 NuGens API running on port ${PORT}`);
+  console.log(`\n🚀 NuGens API running on port ${PORT}`);
+  console.log(`   Environment: ${process.env.NODE_ENV || "development"}`);
+  console.log(`   Health: http://localhost:${PORT}/health\n`);
 });
 
 module.exports = app;
