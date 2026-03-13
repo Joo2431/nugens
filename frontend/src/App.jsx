@@ -1,25 +1,18 @@
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Header         from "./components/header/Header";
+import Footer         from "./components/footer/Footer";
+import ProtectedRoute from "./components/ProtectedRoute";
 
-// Layout components — note subfolder paths
-import Header from "./components/header/Header";
-import Footer from "./components/footer/Footer";
-
-// Pages — flat files (About, Blog, Careers, Contact, Support)
-import About    from "./pages/About";
-import Blog     from "./pages/Blog";
-import Careers  from "./pages/Careers";
-import Contact  from "./pages/Contact";
-import Support  from "./pages/Support";
-
-// Pages — subfolder files (already existed in project)
-import Home     from "./pages/home/Home";
-import GenE     from "./pages/genE/GenE";
-import DigiHub  from "./pages/digihub/DigiHub";
-
-// TODO: add these when ready
-// import HyperX  from "./pages/hyperX/HyperX";
-// import Units   from "./pages/units/Units";
+import Home    from "./pages/Home";
+import About   from "./pages/About";
+import Contact from "./pages/Contact";
+import Blog    from "./pages/Blog";
+import Careers from "./pages/Careers";
+import Support from "./pages/Support";
+import GenE    from "./pages/GenE/GenE";
+import HyperX  from "./pages/HyperX/HyperX";
+import DigiHub from "./pages/DigiHub/DigiHub";
 
 function Layout({ children }) {
   return (
@@ -34,26 +27,26 @@ function Layout({ children }) {
 export default function App() {
   return (
     <BrowserRouter>
-      <Layout>
-        <Routes>
-          <Route path="/"         element={<Home />} />
-          <Route path="/about"    element={<About />} />
-          <Route path="/contact"  element={<Contact />} />
-          <Route path="/blog"     element={<Blog />} />
-          <Route path="/blog/:id" element={<Blog />} />
-          <Route path="/careers"  element={<Careers />} />
-          <Route path="/support"  element={<Support />} />
+      <Routes>
+        <Route path="/"         element={<Layout><Home /></Layout>} />
+        <Route path="/about"    element={<Layout><About /></Layout>} />
+        <Route path="/contact"  element={<Layout><Contact /></Layout>} />
+        <Route path="/blog"     element={<Layout><Blog /></Layout>} />
+        <Route path="/blog/:id" element={<Layout><Blog /></Layout>} />
+        <Route path="/careers"  element={<Layout><Careers /></Layout>} />
+        <Route path="/support"  element={<Layout><Support /></Layout>} />
+        <Route path="/gene"     element={<Layout><GenE /></Layout>} />
+        <Route path="/gen-e"    element={<Layout><GenE /></Layout>} />
+        <Route path="/hyperx"   element={<Layout><HyperX /></Layout>} />
+        <Route path="/digihub"  element={<Layout><DigiHub /></Layout>} />
 
-          {/* Product pages */}
-          <Route path="/gene"     element={<GenE />} />
-          <Route path="/digihub"  element={<DigiHub />} />
-          <Route path="/hyperx"   element={<Home />} /> {/* swap when HyperX page ready */}
-          <Route path="/units"    element={<Home />} /> {/* swap when Units page ready */}
+        <Route
+          path="/gene/dashboard"
+          element={<ProtectedRoute><Layout><GenE /></Layout></ProtectedRoute>}
+        />
 
-          {/* 404 fallback */}
-          <Route path="*"         element={<Home />} />
-        </Routes>
-      </Layout>
+        <Route path="*" element={<Layout><Home /></Layout>} />
+      </Routes>
     </BrowserRouter>
   );
 }

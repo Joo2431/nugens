@@ -26,19 +26,19 @@ function Reveal({ children, delay = 0, style = {} }) {
   );
 }
 
-const JOBS = [
+const jobs = [
   {
     id: 1,
     title: "Website Developer",
     type: "Full Time / Freelance",
     team: "Engineering",
     teamColor: "#0284c7",
-    description: "Build, maintain, and optimise websites for our clients using modern frameworks and CMS platforms.",
+    description: "Build, maintain, and optimize websites for our clients using modern frameworks and CMS platforms.",
     responsibilities: [
       "Develop websites using Shopify, WordPress, HTML, CSS, JS, React",
-      "Maintain Git repositories and version control workflows",
-      "Ensure responsive, accessible, and SEO-friendly builds",
-      "Collaborate closely with designers and marketers",
+      "Maintain Git repositories",
+      "Ensure responsive & SEO-friendly builds",
+      "Collaborate with designers & marketers",
     ],
     skills: ["HTML", "CSS", "JavaScript", "React", "Git", "Shopify / WordPress"],
   },
@@ -48,13 +48,13 @@ const JOBS = [
     type: "Full Time / Freelance",
     team: "Creative",
     teamColor: "#d97706",
-    description: "Create visually compelling designs for brands, ads, and digital platforms across all Nugens products.",
+    description: "Create visually compelling designs for brands, ads, and digital platforms.",
     responsibilities: [
-      "Design social media creatives and ad visuals",
-      "Build brand identity & marketing assets",
-      "Collaborate with the marketing and content team",
+      "Design social media creatives",
+      "Brand identity & marketing assets",
+      "Collaborate with marketing team",
     ],
-    skills: ["Photoshop", "Canva", "Illustrator"],
+    skills: ["Photoshop", "Canva", "Illustrator (optional)"],
   },
   {
     id: 3,
@@ -62,11 +62,11 @@ const JOBS = [
     type: "Full Time / Freelance",
     team: "Creative",
     teamColor: "#d97706",
-    description: "Edit high-quality videos for brands, ads, weddings, and social media content for HyperX and DigiHub.",
+    description: "Edit high-quality videos for brands, ads, weddings, and social media.",
     responsibilities: [
-      "Edit reels, short-form and long-form videos",
-      "Add motion graphics, captions & transitions",
-      "Optimise videos for different social platforms",
+      "Edit reels & long-form videos",
+      "Add motion graphics & transitions",
+      "Optimize videos for social platforms",
     ],
     skills: ["Premiere Pro", "After Effects", "CapCut"],
   },
@@ -76,13 +76,13 @@ const JOBS = [
     type: "Full Time",
     team: "Marketing",
     teamColor: PINK,
-    description: "Manage content strategy and social media presence for Nugens and client brands across all platforms.",
+    description: "Manage content strategy and social media presence for Nugens and client brands.",
     responsibilities: [
-      "Create ad & organic content calendars",
-      "Manage social media accounts across brands",
-      "Plan and execute content strategies for clients",
+      "Create ad & organic content",
+      "Manage social media accounts",
+      "Plan content calendars & strategies",
     ],
-    skills: ["Content Writing", "Social Media", "Strategy", "Copywriting"],
+    skills: ["Content Writing", "Social Media", "Strategy"],
   },
   {
     id: 5,
@@ -90,21 +90,14 @@ const JOBS = [
     type: "Full Time",
     team: "Operations",
     teamColor: "#6b7280",
-    description: "Handle basic office operations, client coordination, and internal team support.",
+    description: "Handle basic office operations and internal coordination.",
     responsibilities: [
-      "Basic office administration and coordination",
-      "Client communication and follow-ups",
-      "Documentation, reports, and scheduling",
+      "Basic office administration",
+      "Client coordination",
+      "Documentation & reports",
     ],
-    skills: ["English Communication", "MS Office", "Organisation"],
+    skills: ["English Communication", "Computer Knowledge", "MS Office"],
   },
-];
-
-const PERKS = [
-  { icon: "🚀", title: "Build real things", desc: "Work on live products that real people use — not internal tools or test environments." },
-  { icon: "🎓", title: "Free HyperX access", desc: "Every team member gets full access to our learning platform and all courses." },
-  { icon: "🤝", title: "Direct mentorship", desc: "Work closely with founders. No layers of management between you and the decision-makers." },
-  { icon: "🌍", title: "Remote-friendly", desc: "Most roles can be done from anywhere in India. We care about output, not hours." },
 ];
 
 export default function Careers() {
@@ -133,12 +126,6 @@ export default function Careers() {
         }
         .job-card:hover { border-color: #fcc8d6; box-shadow: 0 2px 18px rgba(232,24,93,0.06); }
 
-        .job-header {
-          padding: 22px 24px; display: flex; align-items: center;
-          justify-content: space-between; gap: 12; cursor: pointer;
-          user-select: none;
-        }
-
         .toggle-btn {
           padding: 7px 16px; border-radius: 7px; background: transparent;
           border: 1px solid ${B}; font-size: 12.5px; font-weight: 600;
@@ -158,17 +145,12 @@ export default function Careers() {
         .apply-btn {
           display: inline-flex; align-items: center; gap: 7px;
           padding: 10px 22px; border-radius: 8px; background: #0a0a0a;
-          color: #fff; font-size: 13.5px; font-weight: 600; border: none;
-          text-decoration: none; cursor: pointer; transition: background 0.14s;
-          letter-spacing: -0.01em; font-family: 'Plus Jakarta Sans', sans-serif;
+          color: #fff; font-size: 13.5px; font-weight: 600;
+          text-decoration: none; letter-spacing: -0.01em;
+          font-family: 'Plus Jakarta Sans', sans-serif;
+          transition: background 0.14s;
         }
         .apply-btn:hover { background: #222; }
-
-        .perk-card {
-          padding: 22px; border-radius: 10px; border: 1px solid ${B}; background: #fff;
-          transition: border-color 0.18s, box-shadow 0.18s;
-        }
-        .perk-card:hover { border-color: #fcc8d6; box-shadow: 0 2px 18px rgba(232,24,93,0.06); }
 
         .resp-item {
           display: flex; align-items: flex-start; gap: 10px;
@@ -177,12 +159,8 @@ export default function Careers() {
         }
         .resp-item:last-child { border-bottom: none; }
 
-        @media (max-width: 740px) {
-          .perks-grid { grid-template-columns: 1fr 1fr !important; }
-        }
         @media (max-width: 480px) {
-          .perks-grid { grid-template-columns: 1fr !important; }
-          .job-header { flex-direction: column; align-items: flex-start; }
+          .job-header-row { flex-direction: column !important; align-items: flex-start !important; }
         }
       `}</style>
 
@@ -221,8 +199,8 @@ export default function Careers() {
             opacity: on ? 1 : 0, transform: on ? "none" : "translateY(14px)",
             transition: "all 0.46s ease 0.14s"
           }}>
-            Build your career<br />
-            <span style={{ color: PINK }}>while building ours.</span>
+            Careers at{" "}
+            <span style={{ color: PINK }}>Nugens</span>
           </h1>
 
           <p style={{
@@ -231,67 +209,50 @@ export default function Careers() {
             opacity: on ? 1 : 0, transform: on ? "none" : "translateY(10px)",
             transition: "all 0.46s ease 0.24s"
           }}>
-            Join our creative and technology-driven team. Work on real products, grow with mentorship, and be part of something that genuinely matters.
+            Join our creative & technology-driven team. Build products, brands, and careers with us.
           </p>
         </div>
       </section>
 
-      {/* ── PERKS ── */}
-      <section style={{ padding: "60px 24px", background: "#fafafa", borderBottom: `1px solid ${B}` }}>
-        <div style={{ maxWidth: 1060, margin: "0 auto" }}>
+      {/* ── JOB CARDS ── */}
+      <section style={{ padding: "60px 24px 80px", background: "#fafafa" }}>
+        <div style={{ maxWidth: 860, margin: "0 auto" }}>
           <Reveal style={{ marginBottom: 32 }}>
-            <span className="cr-chip" style={{ marginBottom: 10 }}>Why Nugens</span>
-            <h2 style={{
-              fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 700,
-              fontSize: "clamp(20px, 2.8vw, 26px)", letterSpacing: "-0.03em",
-              color: "#0a0a0a", marginTop: 8
-            }}>What you get here</h2>
-          </Reveal>
-
-          <div className="perks-grid" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 12 }}>
-            {PERKS.map((p, i) => (
-              <Reveal key={p.title} delay={i * 60}>
-                <div className="perk-card">
-                  <div style={{ fontSize: 22, marginBottom: 12 }}>{p.icon}</div>
-                  <h4 style={{ fontSize: 13.5, fontWeight: 600, color: "#0a0a0a", marginBottom: 7, letterSpacing: "-0.01em" }}>{p.title}</h4>
-                  <p style={{ fontSize: 13, color: "#9ca3af", lineHeight: 1.65 }}>{p.desc}</p>
-                </div>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── OPEN ROLES ── */}
-      <section style={{ padding: "60px 24px 80px", background: "#fff" }}>
-        <div style={{ maxWidth: 1060, margin: "0 auto" }}>
-          <Reveal style={{ marginBottom: 32 }}>
-            <span className="cr-chip" style={{ marginBottom: 10 }}>Open roles</span>
-            <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", flexWrap: "wrap", gap: 12, marginTop: 8 }}>
-              <h2 style={{
-                fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 700,
-                fontSize: "clamp(20px, 2.8vw, 26px)", letterSpacing: "-0.03em", color: "#0a0a0a"
-              }}>
-                {JOBS.length} positions open
-              </h2>
-              <p style={{ fontSize: 13.5, color: "#9ca3af" }}>
-                Can't find a fit? Email us at{" "}
-                <a href="mailto:careers@nugens.in" style={{ color: PINK, fontWeight: 600, textDecoration: "none" }}>careers@nugens.in</a>
+            <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", flexWrap: "wrap", gap: 12 }}>
+              <div>
+                <span className="cr-chip" style={{ marginBottom: 10 }}>Open roles</span>
+                <h2 style={{
+                  fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 700,
+                  fontSize: "clamp(20px, 2.8vw, 26px)", letterSpacing: "-0.03em",
+                  color: "#0a0a0a", marginTop: 8
+                }}>{jobs.length} positions open</h2>
+              </div>
+              <p style={{ fontSize: 13.5, color: "#9ca3af", fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+                Can't find a fit?{" "}
+                <a href="mailto:careers@nugens.in" style={{ color: PINK, fontWeight: 600, textDecoration: "none" }}>
+                  careers@nugens.in
+                </a>
               </p>
             </div>
           </Reveal>
 
           <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-            {JOBS.map((job, i) => (
-              <Reveal key={job.id} delay={i * 45}>
+            {jobs.map((job, i) => (
+              <Reveal key={job.id} delay={i * 50}>
                 <div className="job-card">
-                  {/* Header row */}
+                  {/* Header */}
                   <div
-                    className="job-header"
+                    className="job-header-row"
+                    style={{
+                      padding: "22px 24px",
+                      display: "flex", alignItems: "center",
+                      justifyContent: "space-between", gap: 12,
+                      cursor: "pointer"
+                    }}
                     onClick={() => setActiveJob(activeJob === job.id ? null : job.id)}
                   >
                     <div style={{ flex: 1 }}>
-                      <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 6, flexWrap: "wrap" }}>
+                      <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 5, flexWrap: "wrap" }}>
                         <h3 style={{
                           fontFamily: "'Plus Jakarta Sans', sans-serif",
                           fontSize: 16, fontWeight: 700, color: "#0a0a0a",
@@ -313,16 +274,13 @@ export default function Careers() {
                       className={`toggle-btn ${activeJob === job.id ? "open" : ""}`}
                       onClick={e => { e.stopPropagation(); setActiveJob(activeJob === job.id ? null : job.id); }}
                     >
-                      {activeJob === job.id ? "Hide details" : "View role"}
+                      {activeJob === job.id ? "Hide" : "View"}
                     </button>
                   </div>
 
-                  {/* Expanded content */}
+                  {/* Expanded */}
                   {activeJob === job.id && (
-                    <div style={{
-                      padding: "0 24px 28px",
-                      borderTop: `1px solid ${B}`
-                    }}>
+                    <div style={{ padding: "0 24px 28px", borderTop: `1px solid ${B}` }}>
                       <p style={{
                         fontSize: 14.5, color: "#4b5563", lineHeight: 1.7,
                         padding: "20px 0 16px",
@@ -371,7 +329,7 @@ export default function Careers() {
                         href={`mailto:careers@nugens.in?subject=Application for ${job.title}`}
                         className="apply-btn"
                       >
-                        Apply for this role →
+                        Apply Now →
                       </a>
                     </div>
                   )}
@@ -382,19 +340,17 @@ export default function Careers() {
         </div>
       </section>
 
-      {/* ── CTA ── */}
-      <section style={{ padding: "72px 24px", background: "#0a0a0a" }}>
-        <div style={{ maxWidth: 580, margin: "0 auto", textAlign: "center" }}>
+      {/* ── BOTTOM CTA ── */}
+      <section style={{ padding: "64px 24px", background: "#0a0a0a" }}>
+        <div style={{ maxWidth: 560, margin: "0 auto", textAlign: "center" }}>
           <Reveal>
             <h2 style={{
               fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 700,
-              fontSize: "clamp(20px, 3vw, 30px)", letterSpacing: "-0.03em",
+              fontSize: "clamp(20px, 3vw, 28px)", letterSpacing: "-0.03em",
               color: "#fff", marginBottom: 14, lineHeight: 1.25
-            }}>
-              Don't see your role listed?
-            </h2>
-            <p style={{ fontSize: 14.5, color: "#6b7280", lineHeight: 1.72, maxWidth: 380, margin: "0 auto 28px" }}>
-              We're always open to passionate people. Send us your portfolio or CV and tell us what you'd bring.
+            }}>Don't see your role listed?</h2>
+            <p style={{ fontSize: 14.5, color: "#6b7280", lineHeight: 1.72, maxWidth: 360, margin: "0 auto 28px" }}>
+              We're always open to passionate people. Send your portfolio or CV and tell us what you'd bring.
             </p>
             <a href="mailto:careers@nugens.in" style={{
               display: "inline-flex", alignItems: "center", gap: 7,
@@ -403,9 +359,7 @@ export default function Careers() {
               textDecoration: "none", letterSpacing: "-0.01em",
               fontFamily: "'Plus Jakarta Sans', sans-serif",
               boxShadow: "0 2px 10px rgba(232,24,93,0.3)"
-            }}>
-              Email careers@nugens.in →
-            </a>
+            }}>Email careers@nugens.in →</a>
           </Reveal>
         </div>
       </section>
