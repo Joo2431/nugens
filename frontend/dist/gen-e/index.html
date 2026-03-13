@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gen-E — AI Career Intelligence | NuGens</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--bg:#080c12;--bg2:#0d1420;--surface:#111827;--border:rgba(255,255,255,0.07);--accent:#00e5ff;--text:#f0f4f8;--muted:#6b7a95;--font-head:'Syne',sans-serif;--font-body:'DM Sans',sans-serif;--sidebar-w:240px}
+    body{background:var(--bg);color:var(--text);font-family:var(--font-body);display:flex;min-height:100vh}
+    .sidebar{width:var(--sidebar-w);background:var(--bg2);border-right:1px solid var(--border);position:fixed;top:0;left:0;bottom:0;display:flex;flex-direction:column;overflow-y:auto}
+    .sidebar-logo{padding:1.5rem 1.25rem;display:flex;align-items:center;gap:0.75rem;border-bottom:1px solid var(--border)}
+    .logo-mark{width:34px;height:34px;background:linear-gradient(135deg,var(--accent),#0099bb);border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:var(--font-head);font-weight:800;font-size:0.85rem;color:#000}
+    .logo-text{font-family:var(--font-head);font-weight:700;font-size:1rem;color:var(--text)}
+    .logo-text span{color:var(--accent)}
+    .product-badge{margin:1rem 1rem 0;background:rgba(0,229,255,0.08);border:1px solid rgba(0,229,255,0.2);border-radius:8px;padding:0.6rem 0.85rem;display:flex;align-items:center;gap:0.6rem}
+    .product-badge-dot{width:7px;height:7px;border-radius:50%;background:var(--accent)}
+    .product-badge-name{font-family:var(--font-head);font-weight:700;font-size:0.85rem;color:var(--accent)}
+    .sidebar-nav{padding:1rem 0.75rem;flex:1}
+    .nav-label{font-size:0.65rem;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#4a5568;padding:0 0.5rem;margin-bottom:0.5rem}
+    .nav-item{display:flex;align-items:center;gap:0.75rem;padding:0.6rem 0.75rem;border-radius:10px;color:var(--muted);font-size:0.875rem;font-weight:500;cursor:pointer;transition:all 0.2s;text-decoration:none;margin-bottom:0.15rem}
+    .nav-item:hover{background:var(--surface);color:var(--text)}
+    .nav-item.active{background:rgba(0,229,255,0.1);color:var(--accent)}
+    .back-btn{margin:0.75rem;padding:0.6rem 0.75rem;border-radius:10px;background:var(--surface);border:1px solid var(--border);color:var(--muted);font-size:0.82rem;cursor:pointer;display:flex;align-items:center;gap:0.5rem;text-decoration:none}
+    .topbar{position:fixed;top:0;left:var(--sidebar-w);right:0;height:60px;background:rgba(8,12,18,0.9);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 2rem;gap:1rem;z-index:40}
+    .topbar-title{font-family:var(--font-head);font-size:1rem;font-weight:700;color:var(--accent)}
+    .topbar-right{margin-left:auto;display:flex;align-items:center;gap:0.75rem}
+    .avatar{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--accent),#f0b429);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.78rem;color:#000}
+    .main{margin-left:var(--sidebar-w);padding-top:60px;flex:1}
+    .main-content{padding:2rem}
+    .page-header{margin-bottom:2rem}
+    .page-header h1{font-family:var(--font-head);font-size:1.75rem;font-weight:700;letter-spacing:-0.5px}
+    .page-header p{color:var(--muted);font-size:0.9rem;margin-top:0.3rem}
+    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
+    .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
+    @media(max-width:900px){.grid-2,.grid-3{grid-template-columns:1fr}}
+    .card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:1.5rem;margin-bottom:1.5rem}
+    .card-title{font-family:var(--font-head);font-size:1rem;font-weight:700;margin-bottom:1.25rem;display:flex;align-items:center;gap:0.6rem}
+    .score-ring{display:flex;align-items:center;justify-content:center;width:100px;height:100px;border-radius:50%;background:conic-gradient(var(--accent) 280deg, #1f2937 280deg);position:relative;margin:0 auto 1rem}
+    .score-ring::after{content:'';position:absolute;inset:8px;background:var(--surface);border-radius:50%}
+    .score-num{position:absolute;font-family:var(--font-head);font-size:1.5rem;font-weight:700;z-index:1;color:var(--accent)}
+    .progress-bar{height:6px;background:var(--border);border-radius:3px;overflow:hidden;margin-top:0.5rem}
+    .progress-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--accent),#0099bb);transition:width 0.8s ease}
+    .skill-row{display:flex;align-items:center;gap:1rem;margin-bottom:0.75rem}
+    .skill-name{font-size:0.85rem;min-width:120px}
+    .skill-bar{flex:1}
+    .skill-pct{font-size:0.78rem;color:var(--muted);min-width:35px;text-align:right}
+    .job-item{border:1px solid var(--border);border-radius:12px;padding:1rem;margin-bottom:0.75rem;cursor:pointer;transition:all 0.2s}
+    .job-item:hover{border-color:rgba(0,229,255,0.3)}
+    .job-company{font-size:0.78rem;color:var(--muted)}
+    .job-title{font-weight:600;font-size:0.95rem;margin:0.2rem 0}
+    .job-meta{display:flex;gap:1rem;margin-top:0.5rem}
+    .job-tag{font-size:0.72rem;background:rgba(0,229,255,0.08);border:1px solid rgba(0,229,255,0.15);color:var(--accent);padding:0.15rem 0.55rem;border-radius:5px}
+    .match-badge{margin-left:auto;font-size:0.72rem;font-weight:700;color:#22c55e}
+    .chat-wrap{display:flex;flex-direction:column;height:300px}
+    .chat-msgs{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:0.75rem;padding-bottom:0.5rem}
+    .chat-msg{padding:0.65rem 0.9rem;border-radius:10px;font-size:0.85rem;line-height:1.5}
+    .chat-msg.ai{background:var(--bg2);border:1px solid var(--border);align-self:flex-start;max-width:85%}
+    .chat-msg.user{background:rgba(0,229,255,0.1);border:1px solid rgba(0,229,255,0.2);align-self:flex-end;max-width:85%}
+    .chat-row{display:flex;gap:0.5rem;margin-top:0.75rem}
+    .chat-input{flex:1;background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:0.6rem 1rem;color:var(--text);font-family:var(--font-body);font-size:0.85rem;outline:none}
+    .chat-input:focus{border-color:var(--accent)}
+    .chat-send{background:var(--accent);border:none;border-radius:8px;padding:0.6rem 1rem;cursor:pointer;font-weight:600;color:#000;font-size:0.85rem}
+    .status-badge{display:inline-block;padding:0.2rem 0.6rem;border-radius:5px;font-size:0.72rem;font-weight:600}
+    .status-applied{background:rgba(0,229,255,0.1);color:var(--accent)}
+    .status-interview{background:rgba(240,180,41,0.1);color:#f0b429}
+    .status-rejected{background:rgba(239,68,68,0.1);color:#ef4444}
+    .status-offer{background:rgba(34,197,94,0.1);color:#22c55e}
+    ::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+  </style>
+</head>
+<body>
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-mark">NG</div>
+    <span class="logo-text">Nu<span>Gens</span></span>
+  </div>
+  <div class="product-badge">
+    <div class="product-badge-dot"></div>
+    <span class="product-badge-name">Gen-E</span>
+  </div>
+  <div class="sidebar-nav">
+    <div class="nav-label">Gen-E</div>
+    <a href="#overview" class="nav-item active" onclick="showSection('overview',this)"><span>🧠</span> AI Advisor</a>
+    <a href="#resume" class="nav-item" onclick="showSection('resume',this)"><span>📄</span> Resume Builder</a>
+    <a href="#jobs" class="nav-item" onclick="showSection('jobs',this)"><span>💼</span> Job Matching</a>
+    <a href="#tracker" class="nav-item" onclick="showSection('tracker',this)"><span>📊</span> Job Tracker</a>
+    <a href="#skills" class="nav-item" onclick="showSection('skills',this)"><span>⚡</span> Skill Gap</a>
+  </div>
+  <a href="/dashboard" class="back-btn">← Back to NuGens</a>
+</aside>
+
+<header class="topbar">
+  <span class="topbar-title">🧠 Gen-E — AI Career Intelligence</span>
+  <div class="topbar-right">
+    <div style="font-size:0.8rem;color:var(--muted)">ATS Score: <strong style="color:var(--accent)">78</strong></div>
+    <div class="avatar">A</div>
+  </div>
+</header>
+
+<main class="main">
+  <div class="main-content">
+
+    <!-- OVERVIEW / AI ADVISOR -->
+    <div id="sec-overview">
+      <div class="page-header">
+        <h1>AI Career Advisor</h1>
+        <p>Ask anything about your career — Gen-E has the answers.</p>
+      </div>
+      <div class="grid-2">
+        <div>
+          <div class="card">
+            <div class="card-title">🤖 Gen-E Mini</div>
+            <div class="chat-wrap">
+              <div class="chat-msgs" id="gene-msgs">
+                <div class="chat-msg ai">Hi! I'm Gen-E Mini, your career AI. I can help with career paths, resume improvement, job search strategies, and skill gap analysis. What would you like to explore?</div>
+              </div>
+              <div class="chat-row">
+                <input class="chat-input" id="gene-input" placeholder="Ask about careers, resume, jobs..." onkeydown="if(event.key==='Enter')sendGeneMsg()" />
+                <button class="chat-send" onclick="sendGeneMsg()">→</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="card">
+            <div class="card-title">📊 Resume Score</div>
+            <div class="score-ring"><span class="score-num">78</span></div>
+            <p style="text-align:center;color:var(--muted);font-size:0.85rem;margin-bottom:1.25rem">Good score — improve with more skills</p>
+            <div class="skill-row"><div class="skill-name">Work Experience</div><div class="skill-bar"><div class="progress-bar"><div class="progress-fill" style="width:85%"></div></div></div><div class="skill-pct">85%</div></div>
+            <div class="skill-row"><div class="skill-name">Skills Match</div><div class="skill-bar"><div class="progress-bar"><div class="progress-fill" style="width:70%"></div></div></div><div class="skill-pct">70%</div></div>
+            <div class="skill-row"><div class="skill-name">ATS Keywords</div><div class="skill-bar"><div class="progress-bar"><div class="progress-fill" style="width:62%"></div></div></div><div class="skill-pct">62%</div></div>
+            <div class="skill-row"><div class="skill-name">Formatting</div><div class="skill-bar"><div class="progress-bar"><div class="progress-fill" style="width:90%"></div></div></div><div class="skill-pct">90%</div></div>
+          </div>
+          <div class="card">
+            <div class="card-title">🔥 Top Matches</div>
+            <div class="job-item">
+              <div class="job-company">Innovate Corp</div>
+              <div style="display:flex;align-items:center"><div class="job-title">Product Manager</div><div class="match-badge">94% match</div></div>
+              <div class="job-meta"><span class="job-tag">Remote</span><span class="job-tag">$95K-120K</span></div>
+            </div>
+            <div class="job-item">
+              <div class="job-company">BuildBase</div>
+              <div style="display:flex;align-items:center"><div class="job-title">Senior PM</div><div class="match-badge">87% match</div></div>
+              <div class="job-meta"><span class="job-tag">Hybrid</span><span class="job-tag">$110K-140K</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TRACKER -->
+    <div id="sec-tracker" style="display:none">
+      <div class="page-header">
+        <h1>Job Tracker</h1>
+        <p>Track every application from submission to offer.</p>
+      </div>
+      <div class="card">
+        <div class="card-title">📋 Applications (14)</div>
+        <div class="job-item"><div class="job-company">TechCorp</div><div style="display:flex;align-items:center"><div class="job-title">Product Manager</div><span class="status-badge status-interview" style="margin-left:auto">Interview</span></div><div class="job-meta"><span class="job-tag">Applied Mar 5</span></div></div>
+        <div class="job-item"><div class="job-company">Innovate Ltd</div><div style="display:flex;align-items:center"><div class="job-title">Senior Analyst</div><span class="status-badge status-applied" style="margin-left:auto">Applied</span></div><div class="job-meta"><span class="job-tag">Applied Mar 8</span></div></div>
+        <div class="job-item"><div class="job-company">StartupXYZ</div><div style="display:flex;align-items:center"><div class="job-title">Growth Manager</div><span class="status-badge status-offer" style="margin-left:auto">Offer</span></div><div class="job-meta"><span class="job-tag">Applied Feb 28</span></div></div>
+        <div class="job-item"><div class="job-company">MegaCorp</div><div style="display:flex;align-items:center"><div class="job-title">Operations Lead</div><span class="status-badge status-rejected" style="margin-left:auto">Rejected</span></div><div class="job-meta"><span class="job-tag">Applied Feb 20</span></div></div>
+      </div>
+    </div>
+
+    <!-- SKILLS -->
+    <div id="sec-skills" style="display:none">
+      <div class="page-header">
+        <h1>Skill Gap Analyzer</h1>
+        <p>See what skills you're missing and get course recommendations from HyperX.</p>
+      </div>
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title">📉 Missing Skills</div>
+          <div class="job-item"><div class="job-title">Product Strategy</div><div class="job-meta"><span class="job-tag">High priority</span><span style="color:#f0b429;font-size:0.78rem;margin-left:auto">→ HyperX Course</span></div></div>
+          <div class="job-item"><div class="job-title">Data Analysis</div><div class="job-meta"><span class="job-tag">Medium priority</span><span style="color:#f0b429;font-size:0.78rem;margin-left:auto">→ HyperX Course</span></div></div>
+          <div class="job-item"><div class="job-title">Leadership & Team Management</div><div class="job-meta"><span class="job-tag">Medium priority</span><span style="color:#f0b429;font-size:0.78rem;margin-left:auto">→ HyperX Course</span></div></div>
+        </div>
+        <div class="card">
+          <div class="card-title">✅ Strong Skills</div>
+          <div class="skill-row"><div class="skill-name">Communication</div><div class="skill-bar"><div class="progress-bar"><div class="progress-fill" style="width:92%"></div></div></div><div class="skill-pct">92%</div></div>
+          <div class="skill-row"><div class="skill-name">Project Mgmt</div><div class="skill-bar"><div class="progress-bar"><div class="progress-fill" style="width:80%"></div></div></div><div class="skill-pct">80%</div></div>
+          <div class="skill-row"><div class="skill-name">Stakeholder Mgmt</div><div class="skill-bar"><div class="progress-bar"><div class="progress-fill" style="width:75%"></div></div></div><div class="skill-pct">75%</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RESUME placeholder -->
+    <div id="sec-resume" style="display:none">
+      <div class="page-header"><h1>Resume Builder</h1><p>Build, optimize and export your ATS-ready resume.</p></div>
+      <div class="card"><p style="color:var(--muted);text-align:center;padding:2rem">Resume editor loading...</p></div>
+    </div>
+
+    <!-- JOBS placeholder -->
+    <div id="sec-jobs" style="display:none">
+      <div class="page-header"><h1>Job Matching</h1><p>AI-matched jobs based on your resume and goals.</p></div>
+      <div class="card"><p style="color:var(--muted);text-align:center;padding:2rem">Job matches loading...</p></div>
+    </div>
+
+  </div>
+</main>
+
+<script>
+  function showSection(name, el) {
+    ['overview','resume','jobs','tracker','skills'].forEach(s => {
+      document.getElementById('sec-'+s).style.display = 'none';
+    });
+    document.getElementById('sec-'+name).style.display = 'block';
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    el.classList.add('active');
+  }
+
+  const geneResponses = [
+    "Based on your profile, moving to Product Management requires strengthening your data analysis skills. HyperX has a great course for this!",
+    "Your resume has good experience but lacks quantifiable achievements. Try adding metrics like '20% revenue increase' to boost your ATS score.",
+    "For career gaps, I recommend getting a certification on HyperX and doing a small freelance project on DigiHub to fill the timeline.",
+    "The best way to switch from support to product is: 1) Get PM fundamentals cert, 2) Build a case study portfolio, 3) Network via DigiHub community.",
+    "Your current ATS score is 78/100. Adding these keywords to your resume would push it above 90: 'agile', 'roadmap', 'OKRs', 'user research'."
+  ];
+  let ri = 0;
+  function sendGeneMsg() {
+    const input = document.getElementById('gene-input');
+    const msgs = document.getElementById('gene-msgs');
+    if (!input.value.trim()) return;
+    const u = document.createElement('div');
+    u.className = 'chat-msg user';
+    u.textContent = input.value;
+    msgs.appendChild(u);
+    input.value = '';
+    setTimeout(() => {
+      const a = document.createElement('div');
+      a.className = 'chat-msg ai';
+      a.textContent = geneResponses[ri++ % geneResponses.length];
+      msgs.appendChild(a);
+      msgs.scrollTop = msgs.scrollHeight;
+    }, 700);
+    msgs.scrollTop = msgs.scrollHeight;
+  }
+</script>
+</body>
+</html>
