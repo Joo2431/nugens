@@ -4,11 +4,11 @@ import { auth, tokenStore } from "../lib/api";
 const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
-  const [user, setUser]       = useState(tokenStore.getUser());
-  const [loading, setLoading] = useState(true);
+  const [user, setUser]             = useState(tokenStore.getUser());
+  const [loading, setLoading]       = useState(true);
   const [initialized, setInitialized] = useState(false);
 
-  // ── Hydrate from token on mount ───────────────────
+  // Hydrate user from stored token on mount
   useEffect(() => {
     async function hydrate() {
       if (tokenStore.isLoggedIn()) {
@@ -26,13 +26,13 @@ export function AuthProvider({ children }) {
     }
     hydrate();
 
-    // Listen for token expiry events
-    const handleLogout = () => { setUser(null); };
-    window.addEventListener("auth:logout", handleLogout);
-    return () => window.removeEventListener("auth:logout", handleLogout);
+    // Listen for token expiry
+    const onLogout = () => setUser(null);
+    window.addEventListener("auth:logout", onLogout);
+    return () => window.removeEventListener("auth:logout", onLogout);
   }, []);
 
-  // ── Login ─────────────────────────────────────────
+  // ── Email login ───────────────────────────────────
   const login = useCallback(async (email, password) => {
     const data = await auth.login({ email, password });
     tokenStore.set(data.token, data.user);
@@ -40,12 +40,20 @@ export function AuthProvider({ children }) {
     return data.user;
   }, []);
 
-  // ── Register ──────────────────────────────────────
+  // ── Email register ────────────────────────────────
   const register = useCallback(async (email, password, full_name) => {
     const data = await auth.register({ email, password, full_name });
     tokenStore.set(data.token, data.user);
     setUser(data.user);
     return data.user;
+  }, []);
+
+  // ── Google login ──────────────────────────────────
+  const googleLogin = useCallback(async (id_token) => {
+    const data = await auth.googleAuth(id_token);
+    tokenStore.set(data.token, data.user);
+    setUser(data.user);
+    return data; // includes is_new_user
   }, []);
 
   // ── Logout ────────────────────────────────────────
@@ -64,18 +72,18 @@ export function AuthProvider({ children }) {
     });
   }, []);
 
-  // ── Complete onboarding ───────────────────────────
+  // ── Onboarding ────────────────────────────────────
   const completeOnboarding = useCallback(async (data) => {
     await auth.onboarding(data);
     updateUser({ onboarded: true, profile_complete: 75 });
   }, [updateUser]);
 
-  const isLoggedIn = !!user;
-
   return (
     <AuthContext.Provider value={{
-      user, loading, initialized, isLoggedIn,
-      login, register, logout, updateUser, completeOnboarding,
+      user, loading, initialized,
+      isLoggedIn: !!user,
+      login, register, googleLogin, logout,
+      updateUser, completeOnboarding,
     }}>
       {children}
     </AuthContext.Provider>
@@ -84,6 +92,6 @@ export function AuthProvider({ children }) {
 
 export function useAuth() {
   const ctx = useContext(AuthContext);
-  if (!ctx) throw new Error("useAuth must be used inside AuthProvider");
+  if (!ctx) throw new Error("useAuth must be inside AuthProvider");
   return ctx;
 }
