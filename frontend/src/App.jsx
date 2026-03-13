@@ -10,9 +10,9 @@ import Contact from "./pages/Contact";
 import Blog    from "./pages/Blog";
 import Careers from "./pages/Careers";
 import Support from "./pages/Support";
-import GenE    from "./pages/GenE/GenE";
-import HyperX  from "./pages/HyperX/HyperX";
-import DigiHub from "./pages/DigiHub/DigiHub";
+import GenE    from "./pages/genE/GenE";
+import HyperX  from "./pages/hyperX/HyperX";
+import DigiHub from "./pages/digihub/DigiHub";
 
 function Layout({ children }) {
   return (
