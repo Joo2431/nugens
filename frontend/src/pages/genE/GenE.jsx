@@ -364,7 +364,7 @@ export default function GenE() {
               Start with Gen-E — it's free, it's specific, and it'll show you a path you probably haven't seen before.
             </p>
             <div style={{ display: "flex", justifyContent: "center", gap: 10, flexWrap: "wrap" }}>
-              <Link to="/gen-e" className="ge-btn-purple">Launch Gen-E AI →</Link>
+              <Link to="/gene/app" className="ge-btn-purple">Launch Gen-E AI →</Link>
               <Link to="/about" className="ge-btn-ghost">Learn about Nugens</Link>
             </div>
           </Reveal>
